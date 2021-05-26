@@ -28,6 +28,15 @@ public class Router {
     public void consultRoute(Controller controller, HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, ClassNotFoundException {
         String route = ( request.getParameter("route") != null ) ? request.getParameter("route") : this.defaultRoute;
         request.setAttribute("currentRoute", route);
+
+        /*
+        Cookie route_cookie = new Cookie("previousRoute", originRoute);
+        route_cookie.setMaxAge(60*60*24);
+        response.addCookie(route_cookie);
+
+         */
+
+
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalDateTime time = LocalDateTime.now();
         System.out.println("[" + formatter.format(time) + "]-------------------------");

@@ -23,7 +23,7 @@ public class Controller extends HttpServlet {
 
     public ArrayList<String> errorMessages = new ArrayList<String>();
     public ArrayList<String> successMessages = new ArrayList<String>();
-    public final Router router = new Router("Front Controller Router", "home", "error_404");
+    public final Router router = new Router("Front Controller Router", "welcome", "error_404");
 
 
     public Controller() {
@@ -39,6 +39,7 @@ public class Controller extends HttpServlet {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        router.addRoute("welcome", "welcome");
         router.addRoute("home", "home");
         router.addRoute("store", "store");
         router.addRoute("create", "create");
@@ -111,6 +112,10 @@ public class Controller extends HttpServlet {
     public String home(HttpServletRequest request, HttpServletResponse response) {
         request.setAttribute("db", db);
         return "index.jsp";
+    }
+    public String welcome(HttpServletRequest request, HttpServletResponse response) {
+        request.setAttribute("db", db);
+        return "welcome.jsp";
     }
     public String search(HttpServletRequest request, HttpServletResponse response) {
         request.setAttribute("db", db);
@@ -297,6 +302,9 @@ public class Controller extends HttpServlet {
     public String darkmode(HttpServletRequest request, HttpServletResponse response) {
 
         String originRoute = request.getParameter("originRoute");
+        if (originRoute.equals("darkmode")) {
+            originRoute = "welcome";
+        }
         String option = request.getParameter("option");
 
         String actual_option = (option.equals("dark")) ? "dark" : "light";
@@ -304,8 +312,7 @@ public class Controller extends HttpServlet {
         Cookie cookie = this.getCookie(request, "darkmode_option");
 
         if ( cookie == null ) {
-            Cookie new_cookie = new Cookie("darkmode_option", "light");
-            new_cookie.setValue( actual_option );
+            Cookie new_cookie = new Cookie("darkmode_option", actual_option);
             new_cookie.setMaxAge(60*60*24);
             response.addCookie(new_cookie);
         } else {
